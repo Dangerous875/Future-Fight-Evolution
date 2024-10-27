@@ -12,6 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkProvider {
+    // sarasa
     @Singleton
     @Provides
     fun getRetrofitProvider(): Retrofit =
