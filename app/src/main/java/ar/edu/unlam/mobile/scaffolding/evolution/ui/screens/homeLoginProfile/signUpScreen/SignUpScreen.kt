@@ -31,10 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ar.edu.unlam.mobile.scaffolding.R
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.*
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.DarkPurple
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.CreateAccountScreenBetaRoute
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.HomeScreenRoute
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.DelftBlue
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.IndigoDye
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.SilverA
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.VioletSky
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -57,7 +58,7 @@ fun SignUpScreen(
                 .fillMaxSize()
                 .background(
                     Brush.verticalGradient(
-                        listOf(SilverA, VioletSky),
+                        listOf(SilverA, IndigoDye),
                         startY = 0f,
                         endY = 600f,
                     ),
@@ -96,8 +97,8 @@ fun SignUpScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp)
                     .height(54.dp),
-            onClick = { navController.navigate(CreateAccountScreenRoute) },
-            colors = ButtonDefaults.buttonColors(containerColor = DarkPurple),
+            onClick = { navController.navigate(CreateAccountScreenBetaRoute) },
+            colors = ButtonDefaults.buttonColors(containerColor = DelftBlue),
         ) {
             Text(
                 text = stringResource(id = R.string.SignUpFree),
@@ -116,7 +117,7 @@ fun SignUpScreen(
         Spacer(modifier = Modifier.size(24.dp))
 
         Text(
-            modifier = Modifier.clickable { navController.navigate(AuthenticationScreenRoute) },
+            modifier = Modifier.clickable { navController.navigate(CreateAccountScreenBetaRoute) },
             text = "Log In",
             color = Color.White,
             fontSize = 18.sp,

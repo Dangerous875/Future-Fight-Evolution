@@ -135,4 +135,5 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.config)
 }

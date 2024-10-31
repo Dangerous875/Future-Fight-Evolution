@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.data.network.model
+package ar.edu.unlam.mobile.scaffolding.evolution.domain.model
 
 sealed class UserDataResponse<out T> {
     data object Loading : UserDataResponse<Nothing>()

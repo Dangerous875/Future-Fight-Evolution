@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.LocationUser
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.UserRanked
 import ar.edu.unlam.mobile.scaffolding.evolution.data.local.ResultDataScreen
+import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetCurrentUserUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetResultDataScreenUseCase
+import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetUserAvatarUrlUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.UpdateUserRankingFireStore
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +28,8 @@ class CombatResultViewModel
         private val updateUserRankingFireStore: UpdateUserRankingFireStore,
         private val firebaseAuth: FirebaseAuth,
         private val fusedLocationProviderClient: FusedLocationProviderClient,
+        private val getCurrentUserUseCase: GetCurrentUserUseCase,
+        private val getUserAvatarUrlUseCase: GetUserAvatarUrlUseCase,
     ) : ViewModel() {
         private val _result = MutableStateFlow<ResultDataScreen?>(null)
         val result = _result.asStateFlow()
@@ -43,7 +47,6 @@ class CombatResultViewModel
             viewModelScope.launch {
                 _result.value = getResultDataScreen()
                 _playerWin.value = checkIfPlayerWin(_result.value!!)
-                // Agreguar que si es anonimus no actualize
                 if (_playerWin.value && firebaseAuth.currentUser != null) {
                     updateUserRanking()
                 }
@@ -69,18 +72,21 @@ class CombatResultViewModel
 
         private fun updateUserRanking() {
             viewModelScope.launch {
+                val userID = firebaseAuth.currentUser?.uid ?: ""
                 val userLocation = getLocation()
+                val imageUrl = getUserAvatarUrlUseCase()
                 Log.i("LOCATIONRULES", "$userLocation")
                 val userRanked =
                     UserRanked(
                         userID = firebaseAuth.currentUser?.uid,
-                        userName = firebaseAuth.currentUser!!.email,
+                        userName = getCurrentUserUseCase().nickname!!,
                         userLocation =
                             LocationUser(
                                 latitude = userLocation!!.latitude,
                                 longitude = userLocation.longitude,
                             ),
                         userVictories = 1,
+                        avatarUrl = imageUrl,
                     )
                 updateUserRankingFireStore(userRanked)
             }

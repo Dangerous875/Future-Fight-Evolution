@@ -78,6 +78,7 @@ fun SuperHeroCombat(
     navController: NavHostController,
     viewModel: CombatViewModel = hiltViewModel(),
 ) {
+    val nickName by viewModel.nickName.collectAsState()
     val superHeroPlayer by viewModel.superHeroPlayer.collectAsState()
     val superHeroCom by viewModel.superHeroCom.collectAsState()
     val backgroundData by viewModel.background.collectAsState()
@@ -110,9 +111,14 @@ fun SuperHeroCombat(
     val playerHealingActivated by viewModel.playerHealingActivated.collectAsState()
     val comHealingActivated by viewModel.comHealingActivated.collectAsState()
     val vibrator = remember { ContextCompat.getSystemService(context, Vibrator::class.java) }
+    val vibratorOff =
+        remember {
+            mutableStateOf(false)
+        }
 
-    if (vibratorActivated) {
-        vibrator?.vibrate(VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE))
+    if (vibratorActivated && !vibratorOff.value) {
+        vibrator?.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE))
+        vibratorOff.value = true
     }
 
     SetOrientationScreen(
@@ -534,20 +540,19 @@ fun SuperHeroCombat(
                             ),
                 )
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Text(
-                        text = "UserName",
+                        text = nickName,
                         textAlign = TextAlign.Start,
                         fontSize = 24.sp,
-                        modifier = Modifier.padding(start = 8.dp),
                         color = Color.Gray,
                     )
                     Text(
                         text = "${superHeroPlayer!!.life}/$lifePlayer",
                         textAlign = TextAlign.End,
                         fontSize = 24.sp,
-                        modifier = Modifier.padding(end = 8.dp, start = 120.dp),
                         color = Color.Gray,
                     )
                 }

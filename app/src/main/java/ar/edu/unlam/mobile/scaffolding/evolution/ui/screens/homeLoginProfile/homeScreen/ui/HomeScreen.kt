@@ -10,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,9 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -44,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -55,6 +60,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import ar.edu.unlam.mobile.scaffolding.R
@@ -62,7 +69,9 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.components.ButtonWithBackgro
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.components.ExitConfirmation
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.components.SetOrientationScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.local.OrientationScreen
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.*
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.SelectPlayerRoute
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.SignUpScreenRoute
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.UserProfileScreenRoute
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.ui.viewmodel.HomeScreenViewModel
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.CyanWay
 import kotlinx.coroutines.delay
@@ -145,54 +154,106 @@ fun ContentViewHome(
 ) {
     val logos by homeScreenViewModel.logos.collectAsState()
     val auth by homeScreenViewModel.auth.collectAsState()
+    val blockVersion by homeScreenViewModel.blockVersion.collectAsState()
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(top = 48.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Image(
-            painter = painterResource(id = logos.logo),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-        )
-
-        Image(
-            painter = painterResource(id = R.drawable.iv_logo),
-            contentDescription = null,
+    if (blockVersion) {
+        ShowUpdateDialog(viewModel = homeScreenViewModel)
+    } else {
+        Box(
             modifier =
                 Modifier
-                    .size(200.dp)
-                    .align(Alignment.TopStart),
-        )
-
-        ButtonWithBackgroundImage(
-            imageResId = R.drawable.iv_button,
-            onClick = {
-                if (auth.currentUser != null) {
-                    navController.navigate(SelectPlayerRoute)
-                } else {
-                    onEnterGame(true)
-                }
-            },
-            modifier =
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .width(300.dp)
-                    .height(80.dp)
-                    .padding(bottom = 22.dp),
+                    .fillMaxSize()
+                    .padding(top = 48.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text = stringResource(id = R.string.EnterGame),
-                fontWeight = FontWeight.Normal,
-                fontFamily = FontFamily(Font(R.font.font_firestar)),
-                fontStyle = FontStyle.Italic,
-                fontSize = 28.sp,
-                color = Color.Black,
+            Image(
+                painter = painterResource(id = logos.logo),
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
             )
+
+            Image(
+                painter = painterResource(id = R.drawable.iv_logo),
+                contentDescription = null,
+                modifier =
+                    Modifier
+                        .size(200.dp)
+                        .align(Alignment.TopStart),
+            )
+
+            ButtonWithBackgroundImage(
+                imageResId = R.drawable.iv_button,
+                onClick = {
+                    if (auth.currentUser != null) {
+                        navController.navigate(SelectPlayerRoute)
+                    } else {
+                        onEnterGame(true)
+                    }
+                },
+                modifier =
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .width(300.dp)
+                        .height(80.dp)
+                        .padding(bottom = 22.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.EnterGame),
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = FontFamily(Font(R.font.font_firestar)),
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 28.sp,
+                    color = Black,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ShowUpdateDialog(viewModel: HomeScreenViewModel) {
+    val context = LocalContext.current
+    val activity = context as Activity
+    Dialog(
+        onDismissRequest = { },
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+    ) {
+        Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+            Column(
+                modifier =
+                    Modifier
+                        .padding(24.dp)
+                        .fillMaxWidth()
+                        .height(300.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "ACTUALIZA",
+                    fontSize = 22.sp,
+                    color = Black,
+                    fontWeight = FontWeight.Bold,
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Para poder disfrutar de todo nuestro contenido actualice la app",
+                    fontSize = 16.sp,
+                    color = Color.Gray,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Button(onClick = { activity.finishAffinity() }) {
+                        Text(text = "Exit")
+                    }
+                    Button(onClick = { viewModel.navigateToPlayStore(context) }) {
+                        Text(text = "¡Update!")
+                    }
+                }
+            }
         }
     }
 }
@@ -240,7 +301,7 @@ fun TopBarHome(
                 fontStyle = FontStyle.Italic,
             )
         },
-        colors = TopAppBarDefaults.topAppBarColors(Color.Black),
+        colors = TopAppBarDefaults.topAppBarColors(Black),
         actions = {
             IconButton(onClick = {
                 if (isLog) {

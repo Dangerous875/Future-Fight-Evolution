@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.uploadImageScreen
+package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
@@ -15,13 +15,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import ar.edu.unlam.mobile.scaffolding.evolution.data.network.utils.Constants.ALL_IMAGES
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.userProfileScreen.viewmodel.UploadImageScreenViewModel
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.uploadImageScreen.image.AbrirGaleria
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.uploadImageScreen.image.AddImageToDatabase
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.uploadImageScreen.image.AddImageToStorage
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.uploadImageScreen.image.GetImageFromDatabase
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.uploadImageScreen.image.ImageContent
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image.AbrirGaleria
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image.AddImageToDatabase
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image.AddImageToStorage
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image.GetImageFromDatabase
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image.ImageContent
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -49,7 +47,8 @@ fun UploadImageScreen(
             ) {
                 AbrirGaleria(
                     openGallery = {
-                        galleryLauncher.launch(ALL_IMAGES)
+                        val allimage: String = "image/*"
+                        galleryLauncher.launch(allimage)
                     },
                 )
             }

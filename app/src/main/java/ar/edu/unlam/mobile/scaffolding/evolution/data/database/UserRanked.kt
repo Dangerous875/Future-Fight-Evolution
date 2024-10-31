@@ -5,4 +5,5 @@ data class UserRanked(
     val userName: String? = null,
     val userLocation: LocationUser? = null,
     val userVictories: Int? = null,
+    val avatarUrl: String? = null,
 )

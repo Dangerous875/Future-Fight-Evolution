@@ -6,7 +6,9 @@ import ar.edu.unlam.mobile.scaffolding.R
 import ar.edu.unlam.mobile.scaffolding.evolution.data.local.Background
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.model.SuperHeroCombat
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetCombatDataScreenUseCase
+import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetCurrentUserUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.SetResultDataScreenUseCase
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +28,11 @@ class CombatViewModel
     constructor(
         getCombatDataScreenUseCase: GetCombatDataScreenUseCase,
         private val setResultDataScreen: SetResultDataScreenUseCase,
+        private val getCurrentUserUseCase: GetCurrentUserUseCase,
+        private val firebaseAuth: FirebaseAuth,
     ) : ViewModel() {
+        private val _nickName = MutableStateFlow("")
+        val nickName = _nickName.asStateFlow()
         private var _superHeroPlayer = MutableStateFlow<SuperHeroCombat?>(null)
         val superHeroPlayer = _superHeroPlayer.asStateFlow()
         private var _superHeroCom = MutableStateFlow<SuperHeroCombat?>(null)
@@ -82,6 +88,12 @@ class CombatViewModel
             val combatDataScreen = getCombatDataScreenUseCase()
             _isLoading.value = true
             viewModelScope.launch {
+                _nickName.value =
+                    if (firebaseAuth.currentUser != null) {
+                        getCurrentUserUseCase().nickname!!
+                    } else {
+                        "Player"
+                    }
                 delay(8000)
                 superHero1 = combatDataScreen.playerCharacter!!
                 superHero2 = combatDataScreen.comCharacter!!
