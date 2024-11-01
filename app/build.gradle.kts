@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.performance)
 }
 
 android {
@@ -102,6 +103,7 @@ dependencies {
 
     androidTestImplementation(libs.google.dagger.hilt.android.testing)
     testImplementation(libs.google.dagger.hilt.android.testing)
+
     // map
     implementation(libs.maps.compose)
     implementation(libs.play.services.maps)
@@ -112,11 +114,14 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.common)
+
     // constraintLayout
     implementation(libs.constraintlayout.compose)
+
     // Serialization and Navigation 2.8.0
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.navigation.compose)
+
     // CAMARA
     implementation(libs.accompanist)
     implementation(libs.androidx.camera.camera2)
@@ -128,9 +133,12 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
+
     // Firebase Implementation
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.perf)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.firestore)

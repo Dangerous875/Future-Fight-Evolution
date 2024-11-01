@@ -18,7 +18,7 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHe
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroRankedScreen.SuperHeroRanked
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.cameraScreen.CameraScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.createAccountScreen.CreateAccountScreenBeta
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.ui.HomeScreen
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.HomeScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.signUpScreen.SignUpScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.UploadImageScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.userProfileScreen.UserProfileScreen

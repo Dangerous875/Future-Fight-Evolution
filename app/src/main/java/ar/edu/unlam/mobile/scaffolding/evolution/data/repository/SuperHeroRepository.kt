@@ -234,4 +234,10 @@ class SuperHeroRepository
             val minVersion = remoteConfig.getString("min_version")
             return if (minVersion.isBlank()) listOf(0, 0) else minVersion.split(".").map { it.toInt() }
         }
+
+        override suspend fun getSpecialEvent(): String {
+            remoteConfig.fetch(0)
+            remoteConfig.activate().await()
+            return remoteConfig.getString("special_event")
+        }
     }

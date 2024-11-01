@@ -3,6 +3,7 @@ package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.us
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.UserData
+import ar.edu.unlam.mobile.scaffolding.evolution.domain.model.UpdateUserDataDto
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetCurrentUserUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetUserAvatarUrlUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.SetUserDataFireStoreUseCase
@@ -20,6 +21,9 @@ class UserProfileScreenViewModel
         private val setUserDataFireStoreUseCase: SetUserDataFireStoreUseCase,
         private val getUserAvatarUrlUseCase: GetUserAvatarUrlUseCase,
     ) : ViewModel() {
+        private val _showUpdateData = MutableStateFlow(false)
+        val showUpdateData = _showUpdateData.asStateFlow()
+
         private val _isLoading = MutableStateFlow(true)
         val isLoading = _isLoading.asStateFlow()
 
@@ -38,6 +42,46 @@ class UserProfileScreenViewModel
                 }
             }
         }
+
+        fun addUpdateData(
+            name: String,
+            nickname: String,
+            infoUser: String,
+        ) {
+            val dto: UpdateUserDataDto? = prepareDataTransferObject(name, nickname, infoUser)
+            val userUpdate: UserData? =
+                _userData.value?.copy(
+                    name = dto?.name,
+                    nickname = dto?.nickname,
+                    infoUser = dto?.infoUser,
+                )
+            userUpdate?.let {
+                viewModelScope.launch {
+                    setUserDataFireStoreUseCase(it)
+                    _userData.value = it
+                }
+            }
+            dismissUpdateDataSelected()
+        }
+
+        fun updateDataSelected() {
+            _showUpdateData.value = true
+        }
+
+        fun dismissUpdateDataSelected() {
+            _showUpdateData.value = false
+        }
+
+        private fun prepareDataTransferObject(
+            name: String,
+            nickname: String,
+            infoUser: String,
+        ): UpdateUserDataDto? =
+            if (name.isBlank() || nickname.isBlank() || infoUser.isBlank()) {
+                null
+            } else {
+                UpdateUserDataDto(name, nickname, infoUser)
+            }
 
         fun updateNickName(newNickName: String = "DummyNick") {
             // Aca agarras el _userData.value? actual y haces una copia con los datos nuevos

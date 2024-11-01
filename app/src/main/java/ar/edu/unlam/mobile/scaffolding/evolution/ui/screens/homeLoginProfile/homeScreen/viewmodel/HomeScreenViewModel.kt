@@ -1,13 +1,14 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.ui.viewmodel
+package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.viewmodel
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.CanAccessToAppUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetUserDataFromFireStoreUseCase
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.data.model.WallpaperLogos
+import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetWallpaperLogosUseCase
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class HomeScreenViewModel
     @Inject
     constructor(
-        private val wallpaperLogos: WallpaperLogos,
+        private val getWallpaperLogosUseCase: GetWallpaperLogosUseCase,
         firebaseAuth: FirebaseAuth,
         private val getUserDataFromFireStoreUseCase: GetUserDataFromFireStoreUseCase,
         private val canAccessToAppUseCase: CanAccessToAppUseCase,
@@ -31,26 +32,37 @@ class HomeScreenViewModel
         private val _blockVersion = MutableStateFlow(false)
         val blockVersion = _blockVersion.asStateFlow()
 
-        private val _logos = MutableStateFlow(wallpaperLogos.logos[0])
+        private val _isLoading = MutableStateFlow(true)
+        val isLoading = _isLoading.asStateFlow()
+
+        private val _logos = MutableStateFlow(0)
         val logos = _logos.asStateFlow()
 
         private val _auth = MutableStateFlow(firebaseAuth)
         val auth = _auth.asStateFlow()
 
-        private var initRandomLogo = true
-
         init {
             viewModelScope.launch {
                 checkUserVersion()
+                val logosList = getWallpaperLogosUseCase()
+                _logos.value = logosList[0]
+                _isLoading.value = _logos.value == 0
+                Log.i("LOGOSREADY", "$logosList")
                 if (_auth.value.currentUser != null) {
                     initUserData()
                 }
-                while (initRandomLogo) {
-                    delay(5000)
-                    val list = wallpaperLogos.logos
-                    val randomNumber = (list.indices).random()
-                    _logos.value = list[randomNumber]
-                }
+                initRandomLogo(logosList)
+            }
+        }
+
+        private suspend fun initRandomLogo(logosList: List<Int>) {
+            while (true) {
+                var randomLogo: Int
+                do {
+                    randomLogo = logosList.random()
+                } while (randomLogo == _logos.value)
+                delay(3000)
+                _logos.value = randomLogo
             }
         }
 
@@ -82,7 +94,6 @@ class HomeScreenViewModel
                     Intent.ACTION_VIEW,
                     Uri.parse("market://details?id=$appPackage"),
                 ).apply {
-                    // Manejo del intent alternativo
                     if (resolveActivity(context.packageManager) == null) {
                         data = Uri.parse("https://play.google.com/store/apps/details?id=$appPackage")
                     }

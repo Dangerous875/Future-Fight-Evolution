@@ -1,6 +1,8 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image
+package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.imageComponent
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.model.UserDataResponse.Failure
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.model.UserDataResponse.Loading
@@ -8,17 +10,19 @@ import ar.edu.unlam.mobile.scaffolding.evolution.domain.model.UserDataResponse.S
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.UploadImageScreenViewModel
 
 @Composable
-fun GetImageFromDatabase(
+fun AddImageToStorage(
     viewModel: UploadImageScreenViewModel = hiltViewModel(),
-    createImageContent: @Composable (imageUrl: String) -> Unit,
+    addImageToDatabase: (downloadUrl: Uri) -> Unit,
 ) {
-    when (val getImageFromDatabaseResponse = viewModel.getImageFromDatabaseResponse) {
+    when (val addImageToStorageResponse = viewModel.addImageToStorageResponse) {
         is Loading -> ProgressBar()
         is Success ->
-            getImageFromDatabaseResponse.data?.let { imageUrl ->
-                createImageContent(imageUrl)
+            addImageToStorageResponse.data?.let { downloadUrl ->
+                LaunchedEffect(downloadUrl) {
+                    addImageToDatabase(downloadUrl)
+                }
             }
 
-        is Failure -> print(getImageFromDatabaseResponse.e)
+        is Failure -> print(addImageToStorageResponse.e)
     }
 }

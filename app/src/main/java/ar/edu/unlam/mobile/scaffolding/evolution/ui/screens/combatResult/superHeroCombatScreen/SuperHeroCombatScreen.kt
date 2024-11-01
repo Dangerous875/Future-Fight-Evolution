@@ -117,7 +117,7 @@ fun SuperHeroCombat(
         }
 
     if (vibratorActivated && !vibratorOff.value) {
-        vibrator?.vibrate(VibrationEffect.createOneShot(1000, VibrationEffect.DEFAULT_AMPLITUDE))
+        vibrator?.vibrate(VibrationEffect.createOneShot(2000, VibrationEffect.DEFAULT_AMPLITUDE))
         vibratorOff.value = true
     }
 

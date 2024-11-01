@@ -2,6 +2,8 @@ package ar.edu.unlam.mobile.scaffolding.evolution.data.di
 
 import ar.edu.unlam.mobile.scaffolding.evolution.data.repository.StorageService
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.repository.ImageRepository
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -26,6 +28,10 @@ object FirebaseModule {
     @Provides
     @Singleton
     fun provideFirebaseFireStore(): FirebaseFirestore = Firebase.firestore
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAnalytics(): FirebaseAnalytics = Firebase.analytics
 
     @Provides
     @Singleton

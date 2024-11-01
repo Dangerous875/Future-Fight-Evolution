@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.ui
+package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -72,8 +74,8 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.local.OrientationScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.SelectPlayerRoute
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.SignUpScreenRoute
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.UserProfileScreenRoute
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.ui.viewmodel.HomeScreenViewModel
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.CyanWay
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.viewmodel.HomeScreenViewModel
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.ColorWay
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -152,60 +154,70 @@ fun ContentViewHome(
     homeScreenViewModel: HomeScreenViewModel,
     onEnterGame: (Boolean) -> Unit,
 ) {
-    val logos by homeScreenViewModel.logos.collectAsState()
+    val logo by homeScreenViewModel.logos.collectAsState()
     val auth by homeScreenViewModel.auth.collectAsState()
     val blockVersion by homeScreenViewModel.blockVersion.collectAsState()
+    val isLoading by homeScreenViewModel.isLoading.collectAsState()
 
     if (blockVersion) {
         ShowUpdateDialog(viewModel = homeScreenViewModel)
     } else {
-        Box(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(top = 48.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Image(
-                painter = painterResource(id = logos.logo),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop,
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.iv_logo),
-                contentDescription = null,
-                modifier =
-                    Modifier
-                        .size(200.dp)
-                        .align(Alignment.TopStart),
-            )
-
-            ButtonWithBackgroundImage(
-                imageResId = R.drawable.iv_button,
-                onClick = {
-                    if (auth.currentUser != null) {
-                        navController.navigate(SelectPlayerRoute)
-                    } else {
-                        onEnterGame(true)
-                    }
-                },
-                modifier =
-                    Modifier
-                        .align(Alignment.BottomCenter)
-                        .width(300.dp)
-                        .height(80.dp)
-                        .padding(bottom = 22.dp),
+        if (isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize().background(Black),
+                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text = stringResource(id = R.string.EnterGame),
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = FontFamily(Font(R.font.font_firestar)),
-                    fontStyle = FontStyle.Italic,
-                    fontSize = 28.sp,
-                    color = Black,
+                CircularProgressIndicator(color = Color.Cyan)
+            }
+        } else {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .padding(top = 48.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = painterResource(id = logo),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop,
                 )
+
+                Image(
+                    painter = painterResource(id = R.drawable.iv_logo),
+                    contentDescription = null,
+                    modifier =
+                        Modifier
+                            .size(200.dp)
+                            .align(Alignment.TopStart),
+                )
+
+                ButtonWithBackgroundImage(
+                    imageResId = R.drawable.iv_button,
+                    onClick = {
+                        if (auth.currentUser != null) {
+                            navController.navigate(SelectPlayerRoute)
+                        } else {
+                            onEnterGame(true)
+                        }
+                    },
+                    modifier =
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .width(300.dp)
+                            .height(80.dp)
+                            .padding(bottom = 22.dp),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.EnterGame),
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = FontFamily(Font(R.font.font_firestar)),
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 28.sp,
+                        color = Black,
+                    )
+                }
             }
         }
     }
@@ -271,7 +283,7 @@ fun TopBarHome(
     val isLog = auth.currentUser != null
     var changeColor by remember { mutableStateOf(false) }
     val animatedColor by animateColorAsState(
-        targetValue = if (changeColor) Color.White else CyanWay,
+        targetValue = if (changeColor) Color.White else ColorWay,
         animationSpec =
             androidx.compose.animation.core
                 .tween(durationMillis = 1000),

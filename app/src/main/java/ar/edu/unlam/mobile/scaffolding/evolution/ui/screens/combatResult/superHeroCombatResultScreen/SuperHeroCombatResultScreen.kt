@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -51,6 +50,7 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.CombatScreenRoute
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.SelectPlayerRoute
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroCombatResultScreen.viewmodel.CombatResultViewModel
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.BlackCustom
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
@@ -81,15 +81,68 @@ fun SuperHeroCombatResult(
         )
     }
 
+    LaunchedEffect(permissionLocationGranted) {
+        if (permissionLocationGranted) {
+            viewModel.updateUserRankingDB()
+        }
+    }
+
     if (permissionLocationGranted) {
         ContentView(navController = navController, viewModel = viewModel)
     } else {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Column {
-                Text(text = "Please push in setting and granted permissions ")
+        Box(
+            modifier = Modifier.fillMaxSize().background(BlackCustom),
+            contentAlignment = Alignment.Center,
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    text = "Please push in setting and granted permissions and reset Battle to continue ... ",
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                )
                 Spacer(modifier = Modifier.size(16.dp))
-                Button(onClick = { openAppSettings(context) }) {
-                    Text(text = "Go settings")
+                ButtonWithBackgroundImage(
+                    imageResId = R.drawable.iv_button,
+                    onClick = {
+                        openAppSettings(context)
+                    },
+                    modifier =
+                        Modifier
+                            .width(300.dp)
+                            .height(120.dp)
+                            .padding(vertical = 22.dp),
+                ) {
+                    Text(
+                        text = "Go settings",
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = FontFamily(Font(R.font.font_firestar)),
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 28.sp,
+                        color = Color.Black,
+                    )
+                }
+                Spacer(modifier = Modifier.size(16.dp))
+                ButtonWithBackgroundImage(
+                    imageResId = R.drawable.iv_button,
+                    onClick = {
+                        viewModel.resetLife()
+                        navController.navigate(CombatScreenRoute)
+                    },
+                    modifier =
+                        Modifier
+                            .width(300.dp)
+                            .height(90.dp),
+                ) {
+                    Text(
+                        text = "Reset Battle",
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = FontFamily(Font(R.font.font_firestar)),
+                        fontStyle = FontStyle.Italic,
+                        fontSize = 28.sp,
+                        color = Color.Black,
+                    )
                 }
             }
         }

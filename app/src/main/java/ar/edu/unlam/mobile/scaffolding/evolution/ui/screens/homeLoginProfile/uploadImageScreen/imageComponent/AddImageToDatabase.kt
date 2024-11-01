@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.image
+package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.imageComponent
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

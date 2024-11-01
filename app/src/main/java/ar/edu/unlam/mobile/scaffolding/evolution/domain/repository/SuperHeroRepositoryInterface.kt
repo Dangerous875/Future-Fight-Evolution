@@ -45,4 +45,6 @@ interface SuperHeroRepositoryInterface {
     suspend fun getCurrentVersion(): List<Int>
 
     suspend fun minAllowedVersion(): List<Int>
+
+    suspend fun getSpecialEvent(): String
 }

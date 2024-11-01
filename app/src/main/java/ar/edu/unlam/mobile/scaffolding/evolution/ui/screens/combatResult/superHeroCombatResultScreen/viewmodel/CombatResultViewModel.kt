@@ -1,7 +1,10 @@
 package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroCombatResultScreen.viewmodel
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.LocationUser
@@ -30,6 +33,7 @@ class CombatResultViewModel
         private val fusedLocationProviderClient: FusedLocationProviderClient,
         private val getCurrentUserUseCase: GetCurrentUserUseCase,
         private val getUserAvatarUrlUseCase: GetUserAvatarUrlUseCase,
+        context: Context,
     ) : ViewModel() {
         private val _result = MutableStateFlow<ResultDataScreen?>(null)
         val result = _result.asStateFlow()
@@ -40,17 +44,33 @@ class CombatResultViewModel
         private val _playerWin = MutableStateFlow(false)
         val playerWin = _playerWin.asStateFlow()
 
-        private val _permissionLocation = MutableStateFlow(false)
+        private var hasUpdatedRanking = false
+
+        private val _permissionLocation = MutableStateFlow(checkPermissionGranted(context))
+
+        private fun checkPermissionGranted(context: Context) =
+            ContextCompat.checkSelfPermission(
+                context,
+                @Suppress("ktlint:standard:max-line-length")
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            ) == PackageManager.PERMISSION_GRANTED
+
         val permissionLocation = _permissionLocation.asStateFlow()
 
         init {
             viewModelScope.launch {
                 _result.value = getResultDataScreen()
                 _playerWin.value = checkIfPlayerWin(_result.value!!)
-                if (_playerWin.value && firebaseAuth.currentUser != null) {
-                    updateUserRanking()
-                }
+                Log.i("PERMISSIONG", "${_permissionLocation.value}")
+                updateUserRankingDB()
                 _isLoading.value = false
+            }
+        }
+
+        fun updateUserRankingDB() {
+            if (!hasUpdatedRanking && _playerWin.value && firebaseAuth.currentUser != null && _permissionLocation.value) {
+                updateUserRanking()
+                hasUpdatedRanking = true
             }
         }
 
@@ -72,7 +92,7 @@ class CombatResultViewModel
 
         private fun updateUserRanking() {
             viewModelScope.launch {
-                val userID = firebaseAuth.currentUser?.uid ?: ""
+                Log.i("PERMISSIONG", "PASA")
                 val userLocation = getLocation()
                 val imageUrl = getUserAvatarUrlUseCase()
                 Log.i("LOCATIONRULES", "$userLocation")
