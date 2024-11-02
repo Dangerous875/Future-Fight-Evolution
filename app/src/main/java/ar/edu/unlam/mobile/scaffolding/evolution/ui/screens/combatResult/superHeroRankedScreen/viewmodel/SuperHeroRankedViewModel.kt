@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroRankedScreen.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.UserRanked
@@ -27,10 +26,8 @@ class SuperHeroRankedViewModel
         init {
             viewModelScope.launch {
                 val usersFlow: Flow<List<UserRanked>> = getUsersRankingFireStore()
-                Log.i("FlowFirestore", "$usersFlow")
                 usersFlow.collect { users ->
                     _usersRanked.value = users.sortedByDescending { it.userVictories }
-                    Log.i("FlowFirestore", "${_usersRanked.value}")
                     _isLoading.value = false
                 }
             }

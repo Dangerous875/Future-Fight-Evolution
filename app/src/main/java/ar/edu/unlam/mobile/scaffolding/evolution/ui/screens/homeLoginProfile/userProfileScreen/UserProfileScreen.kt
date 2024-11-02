@@ -265,17 +265,13 @@ fun UserInfoCard(
             Column {
                 Text(text = label, color = Color.Black, style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(8.dp))
-                if (true) {
-                    Text(
-                        text = value,
-                        fontSize = 16.sp,
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                } else {
-                    CircularProgressIndicator()
-                }
+                Text(
+                    text = value,
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleMedium,
+                )
             }
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = { }) {
