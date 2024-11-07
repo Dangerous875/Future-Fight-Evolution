@@ -92,42 +92,55 @@ fun SuperHeroRanked(
                         .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    text = "Top Players",
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = FontFamily(Font(R.font.font_firestar)),
-                    fontStyle = FontStyle.Italic,
-                    fontSize = 24.sp,
-                    color = Color.White,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                LazyColumn(modifier = Modifier.fillMaxWidth().height(700.dp)) {
-                    itemsIndexed(usersRanked) { index, user ->
-                        CardView(index + 1, user)
-                        Spacer(modifier = Modifier.height(8.dp)) // Espacio entre tarjetas
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(10.dp))
-                ButtonWithBackgroundImage(
-                    imageResId = R.drawable.iv_button,
-                    onClick = {
-                        navController.navigate(Routes.RankedMapsUsersRoute)
-                    },
-                    modifier =
-                        Modifier
-                            .width(300.dp)
-                            .height(70.dp),
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(0.5f),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "See location Rank",
+                        text = "Top Players",
                         fontWeight = FontWeight.Normal,
                         fontFamily = FontFamily(Font(R.font.font_firestar)),
                         fontStyle = FontStyle.Italic,
-                        color = Color.Black,
-                        fontSize = 20.sp,
+                        fontSize = 24.sp,
+                        color = Color.White,
                     )
+                }
+
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(8f).padding(8.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        itemsIndexed(usersRanked) { index, user ->
+                            CardView(index + 1, user)
+                            Spacer(modifier = Modifier.height(8.dp))
+                        }
+                    }
+                }
+
+                Box(
+                    modifier = Modifier.fillMaxWidth().weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    ButtonWithBackgroundImage(
+                        imageResId = R.drawable.iv_button,
+                        onClick = {
+                            navController.navigate(Routes.RankedMapsUsersRoute)
+                        },
+                        modifier =
+                            Modifier
+                                .width(300.dp)
+                                .height(70.dp),
+                    ) {
+                        Text(
+                            text = "See location Rank",
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = FontFamily(Font(R.font.font_firestar)),
+                            fontStyle = FontStyle.Italic,
+                            color = Color.Black,
+                            fontSize = 20.sp,
+                        )
+                    }
                 }
             }
         }

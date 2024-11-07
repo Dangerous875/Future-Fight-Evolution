@@ -11,7 +11,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.viewmodel.NavigationWrapperViewModel
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.qrGenerateScreen.QRGenerateScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.rankedMapScreen.RankedMaps
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroCombatResultScreen.SuperHeroCombatResult
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroCombatScreen.SuperHeroCombat
@@ -19,6 +18,7 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHe
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.cameraScreen.CameraScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.createAccountScreen.CreateAccountScreenBeta
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.HomeScreen
+import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.qrGenerateScreen.QRGenerateScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.signUpScreen.SignUpScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.uploadImageScreen.UploadImageScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.userProfileScreen.UserProfileScreen

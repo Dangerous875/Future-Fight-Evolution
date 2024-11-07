@@ -164,7 +164,10 @@ fun ContentViewHome(
     } else {
         if (isLoading) {
             Box(
-                modifier = Modifier.fillMaxSize().background(Black),
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .background(Black),
                 contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(color = Color.Cyan)
@@ -289,7 +292,6 @@ fun TopBarHome(
                 .tween(durationMillis = 1000),
         label = "",
     )
-
     LaunchedEffect(Unit) {
         while (true) {
             delay(1500)
@@ -463,6 +465,7 @@ fun TopBarHome(
                                 .fillMaxWidth()
                                 .height(8.dp),
                     )
+
                     Row(
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.CenterVertically,

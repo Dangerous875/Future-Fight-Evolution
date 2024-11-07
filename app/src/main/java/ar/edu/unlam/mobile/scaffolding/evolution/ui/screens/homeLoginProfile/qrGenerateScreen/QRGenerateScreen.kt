@@ -1,4 +1,4 @@
-package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.qrGenerateScreen
+package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.qrGenerateScreen
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image

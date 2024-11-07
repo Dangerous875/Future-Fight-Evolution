@@ -83,9 +83,23 @@ class UserProfileScreenViewModel
                 UpdateUserDataDto(name, nickname, infoUser)
             }
 
-        fun updateNickName(newNickName: String = "DummyNick") {
+        fun updateAllData(
+            newName: String,
+            newNickname: String,
+            newInfoUser: String,
+        ) {
+            val userUpdate = _userData.value?.copy(name = newName, nickname = newNickname, infoUser = newInfoUser)
+            userUpdate?.let {
+                _userData.value = it
+                viewModelScope.launch {
+                    setUserDataFireStoreUseCase(it)
+                }
+            }
+        }
+
+        fun updateNickName(newnickname: String) {
             // Aca agarras el _userData.value? actual y haces una copia con los datos nuevos
-            val userUpdate = _userData.value?.copy(nickname = newNickName)
+            val userUpdate = _userData.value?.copy(nickname = newnickname)
 
             userUpdate?.let {
                 viewModelScope.launch {
