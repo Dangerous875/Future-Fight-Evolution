@@ -35,11 +35,17 @@ class UserProfileScreenViewModel
 
         init {
             viewModelScope.launch {
-                _avatarUrl.value = getUserAvatarUrlUseCase()
+                getUserAvatar()
                 _userData.value = getCurrentUserUseCase()
                 if (_userData.value != null) {
                     _isLoading.value = false
                 }
+            }
+        }
+
+        fun getUserAvatar() {
+            viewModelScope.launch {
+                _avatarUrl.value = getUserAvatarUrlUseCase()
             }
         }
 
@@ -88,7 +94,8 @@ class UserProfileScreenViewModel
             newNickname: String,
             newInfoUser: String,
         ) {
-            val userUpdate = _userData.value?.copy(name = newName, nickname = newNickname, infoUser = newInfoUser)
+            val userUpdate =
+                _userData.value?.copy(name = newName, nickname = newNickname, infoUser = newInfoUser)
             userUpdate?.let {
                 _userData.value = it
                 viewModelScope.launch {
@@ -97,18 +104,18 @@ class UserProfileScreenViewModel
             }
         }
 
-        fun updateNickName(newnickname: String) {
-            // Aca agarras el _userData.value? actual y haces una copia con los datos nuevos
-            val userUpdate = _userData.value?.copy(nickname = newnickname)
-
-            userUpdate?.let {
-                viewModelScope.launch {
-                    // Actualizas la DB en el Hilo secundario
-                    setUserDataFireStoreUseCase(it)
-                    // Actualizas la vista manualmente para no tener que esperar otra llamada de la BD
-                    // La proxima ves que se recargue la pantalla si va a trar los datos actualizados
-                    _userData.value = it // Asignamos el nuevo valor a _userData
-                }
-            }
-        }
+//        fun updateNickName(newnickname: String) {
+//            // Aca agarras el _userData.value? actual y haces una copia con los datos nuevos
+//            val userUpdate = _userData.value?.copy(nickname = newnickname)
+//
+//            userUpdate?.let {
+//                viewModelScope.launch {
+//                    // Actualizas la DB en el Hilo secundario
+//                    setUserDataFireStoreUseCase(it)
+//                    // Actualizas la vista manualmente para no tener que esperar otra llamada de la BD
+//                    // La proxima ves que se recargue la pantalla si va a trar los datos actualizados
+//                    _userData.value = it // Asignamos el nuevo valor a _userData
+//                }
+//            }
+//        }
     }

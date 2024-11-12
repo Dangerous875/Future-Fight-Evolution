@@ -510,7 +510,6 @@ fun SuperHeroCombat(
         }
 
         Row(
-            // LifePlayer
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -518,6 +517,7 @@ fun SuperHeroCombat(
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.Top,
         ) {
+            // LifePlayer
             Box(
                 modifier =
                     Modifier

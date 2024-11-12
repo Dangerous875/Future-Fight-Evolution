@@ -28,4 +28,6 @@
     <color name="healingEnabledB">#9dd025</color>
     <color name="whatsappGreen">#25D366</color>
     <color name="whatsappGreenSoft">#06A77D</color>
+    <color name="qrcodeViolet">#230C33</color>
+
 </resources>

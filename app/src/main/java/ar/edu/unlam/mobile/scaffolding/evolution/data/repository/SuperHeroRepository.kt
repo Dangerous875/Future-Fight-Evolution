@@ -49,6 +49,48 @@ class SuperHeroRepository
 
         override fun getResultDataScreen(): ResultDataScreen = resultDataScreen
 
+        override suspend fun getUserDataById(userDataId: String): Flow<UserData?> =
+            callbackFlow {
+                val listener =
+                    firestore
+                        .collection(firestore_collection_userFutureFight)
+                        .document(userDataId)
+                        .addSnapshotListener { snapshot, error ->
+                            if (error != null) {
+                                close(error)
+                                return@addSnapshotListener
+                            }
+                            if (snapshot != null && snapshot.exists()) {
+                                val userData = snapshot.toObject(UserData::class.java)
+                                trySend(userData).isSuccess
+                            } else {
+                                trySend(null).isSuccess
+                            }
+                        }
+                awaitClose { listener.remove() }
+            }
+
+        override suspend fun getUserRankedByUserID(userId: String): Flow<UserRanked?> =
+            callbackFlow {
+                val listener =
+                    firestore
+                        .collection(firestore_collection_userRanking)
+                        .whereEqualTo("userID", userId) // Buscar por el campo "userID"
+                        .addSnapshotListener { snapshot, error ->
+                            if (error != null) {
+                                close(error)
+                                return@addSnapshotListener
+                            }
+                            if (snapshot != null && snapshot.documents.isNotEmpty()) {
+                                val user = snapshot.documents[0].toObject(UserRanked::class.java)
+                                trySend(user).isSuccess
+                            } else {
+                                trySend(null).isSuccess
+                            }
+                        }
+                awaitClose { listener.remove() }
+            }
+
         override fun setResultDataScreen(
             superHeroPlayer: SuperHeroCombat,
             superHeroCom: SuperHeroCombat,
@@ -73,6 +115,7 @@ class SuperHeroRepository
                             }
                             if (snapshot != null && snapshot.exists()) {
                                 val user = snapshot.toObject(UserRanked::class.java)
+
                                 trySend(user).isSuccess
                             } else {
                                 trySend(null).isSuccess

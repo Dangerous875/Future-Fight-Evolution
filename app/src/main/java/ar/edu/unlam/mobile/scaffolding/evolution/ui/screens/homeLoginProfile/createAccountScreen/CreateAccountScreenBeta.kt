@@ -114,8 +114,7 @@ fun CreateAccountScreenBeta(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val textQuestion =
-                    if (showLoginForm.value) "Don't have an account yet?" else "Already have an account?"
+                val textQuestion = if (showLoginForm.value) "Don't have an account yet?" else "Already have an account?"
                 val textAnswer = if (showLoginForm.value) "Create an Account" else "Log In"
                 Text(text = textQuestion)
                 Text(

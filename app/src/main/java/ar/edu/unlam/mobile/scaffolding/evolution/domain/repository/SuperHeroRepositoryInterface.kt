@@ -47,4 +47,8 @@ interface SuperHeroRepositoryInterface {
     suspend fun minAllowedVersion(): List<Int>
 
     suspend fun getSpecialEvent(): String
+
+    suspend fun getUserDataById(userDataId: String): Flow<UserData?>
+
+    suspend fun getUserRankedByUserID(userId: String): Flow<UserRanked?>
 }

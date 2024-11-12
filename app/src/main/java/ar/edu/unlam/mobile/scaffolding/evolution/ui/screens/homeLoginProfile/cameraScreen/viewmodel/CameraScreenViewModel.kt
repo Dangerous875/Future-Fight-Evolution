@@ -1,6 +1,5 @@
 package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.cameraScreen.viewmodel
 
-import android.net.Uri
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +10,6 @@ import javax.inject.Inject
 class CameraScreenViewModel
     @Inject
     constructor() : ViewModel() {
-        private lateinit var uri: Uri
         private val _permissionCamera = MutableStateFlow(false)
         val permissionCamera = _permissionCamera.asStateFlow()
 

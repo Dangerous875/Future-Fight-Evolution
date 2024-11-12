@@ -97,7 +97,7 @@ fun CameraScreen(
                     onClick = {
                         audio.start()
                         val executor = ContextCompat.getMainExecutor(context)
-                        takePicture(cameraController, executor, directory)
+                        takePhoto(cameraController, executor, directory)
                     },
                 ) {
                     Icon(
@@ -253,7 +253,7 @@ private fun openPhotoDirectory(
     context.startActivity(intent)
 }
 
-private fun takePicture(
+private fun takePhoto(
     camaraController: LifecycleCameraController,
     executor: Executor,
     directory: File,

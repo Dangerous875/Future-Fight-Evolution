@@ -12,17 +12,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun AbrirGaleria(openGallery: () -> Unit) {
+fun AbrirCamara(openCamera: () -> Unit) {
     Box(
         modifier =
             Modifier
                 .fillMaxSize()
                 .padding(46.dp),
-        contentAlignment = Alignment.BottomStart,
+        contentAlignment = Alignment.BottomEnd,
     ) {
-        Button(onClick = openGallery) {
+        Button(onClick = openCamera) {
             Text(
-                text = "Open Gallery",
+                text = "Take Picture",
                 fontSize = 17.sp,
             )
         }

@@ -19,9 +19,6 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <uses-permission android:name="android.permission.VIBRATE" />
-
-
     <application
         android:name=".evolution.ScaffoldingApplication"
         android:allowBackup="true"
