@@ -1,5 +1,6 @@
 package ar.edu.unlam.mobile.scaffolding.evolution.data.di
 
+import ar.edu.unlam.mobile.scaffolding.evolution.data.firebase.AnalyticsManager
 import ar.edu.unlam.mobile.scaffolding.evolution.data.repository.StorageService
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.repository.ImageRepository
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -56,4 +57,7 @@ object FirebaseModule {
             setConfigSettingsAsync(remoteConfigSettings { minimumFetchIntervalInSeconds = 3600 })
             fetchAndActivate()
         }
+
+    @Provides
+    fun provideAnalyticsManager(analytics: FirebaseAnalytics): AnalyticsManager = AnalyticsManager(analytics)
 }

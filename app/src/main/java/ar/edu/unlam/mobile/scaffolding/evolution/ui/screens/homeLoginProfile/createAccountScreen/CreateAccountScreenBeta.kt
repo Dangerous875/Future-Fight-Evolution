@@ -47,9 +47,11 @@ import androidx.navigation.NavController
 import ar.edu.unlam.mobile.scaffolding.R
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.UserData
 import ar.edu.unlam.mobile.scaffolding.evolution.data.database.firestore_collection_userFutureFight
+import ar.edu.unlam.mobile.scaffolding.evolution.data.firebase.AnalyticsManager
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.core.routes.Routes.HomeScreenRoute
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.IndigoDye
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.SilverB
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -59,6 +61,8 @@ fun CreateAccountScreenBeta(
     auth: FirebaseAuth,
 ) {
     val context = LocalContext.current
+    val analytics = remember { FirebaseAnalytics.getInstance(context) }
+    val manager = AnalyticsManager(analytics)
     val showLoginForm =
         rememberSaveable {
             mutableStateOf(true)
@@ -96,7 +100,7 @@ fun CreateAccountScreenBeta(
                     isCreateAccount = false,
                 ) { email, password ->
                     Log.d("FutureFightPrueba", "Creando cuenta con $email y $password")
-                    loginUser(auth, email, password, navController, context)
+                    loginUser(auth, email, password, navController, manager, context)
                 }
             } else {
                 Text(
@@ -106,7 +110,7 @@ fun CreateAccountScreenBeta(
                 )
                 UserFormCreateAccount(isCreateAccount = true) { email, password, name, nickname ->
                     Log.d("FutureFightPrueba", "Logueado con $email, $password, $name y $nickname")
-                    createUser(auth, email, password, name, nickname, navController, context)
+                    createUser(auth, email, password, name, nickname, navController, manager, context)
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -351,6 +355,7 @@ fun loginUser(
     email: String,
     password: String,
     navController: NavController,
+    analytics: AnalyticsManager,
     context: Context,
 ) {
     if (email.isNotBlank() && password.isNotBlank()) {
@@ -359,6 +364,7 @@ fun loginUser(
                 Toast
                     .makeText(context, "Login Successful", Toast.LENGTH_SHORT)
                     .show()
+                analytics.loginUser() // TODO PRUEBA DE ANALÍTICA AL REALIZAR LOGIN
                 navController.navigate(HomeScreenRoute) {
                     popUpTo<HomeScreenRoute> { inclusive = true }
                 }
@@ -372,6 +378,7 @@ fun loginUser(
         Toast.makeText(context, "User or Password incorrect", Toast.LENGTH_SHORT).show()
     }
 }
+// test
 
 fun createUser(
     auth: FirebaseAuth,
@@ -380,6 +387,7 @@ fun createUser(
     name: String,
     nickname: String,
     navController: NavController,
+    analytics: AnalyticsManager,
     context: Context,
 ) {
     auth
@@ -396,6 +404,7 @@ fun createUser(
                         infoUser = "Info Default",
                     )
                 saveUserDataToFirestore(userData, context)
+                analytics.createAccountUser() // TODO PRUEBA DE ANALITICA AL CREAR CUENTA DE USUARIO
                 // TODO navega hacia la pantalla principal si la cuenta fue creada
                 navController.navigate(HomeScreenRoute) {
                     popUpTo<HomeScreenRoute> { inclusive = true }

@@ -15,6 +15,7 @@ class WallpaperLogos
                 Logo(R.drawable.iv_marvelthree),
                 Logo(R.drawable.iv_marvelfour),
                 Logo(R.drawable.iv_marvelfive),
+                Logo(R.drawable.iv_marvelsix),
             )
         val christmas =
             listOf(

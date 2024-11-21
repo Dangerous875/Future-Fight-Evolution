@@ -15,7 +15,6 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.rankedM
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroCombatResultScreen.SuperHeroCombatResult
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroCombatScreen.SuperHeroCombat
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.combatResult.superHeroRankedScreen.SuperHeroRanked
-import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.cameraScreen.CameraScreen
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.cameraScreen.CameraScreenBeta
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.createAccountScreen.CreateAccountScreenBeta
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.homeScreen.HomeScreen
@@ -73,11 +72,6 @@ fun NavigationWrapper(viewModel: NavigationWrapperViewModel = hiltViewModel()) {
             )
         }
         composable<Routes.RankedRoute> { SuperHeroRanked(navController = navController) }
-        composable<Routes.CameraScreenRoute> {
-            CameraScreen(
-                navController = navController,
-            )
-        }
         composable<Routes.QRGenerateScreenRoute> { QRGenerateScreen(auth) }
         composable<Routes.ShowScanScreenRoute> {
             ShowScanScreen(

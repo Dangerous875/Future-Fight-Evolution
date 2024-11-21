@@ -2,6 +2,10 @@ package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.selectCharacterMap.
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
@@ -19,13 +23,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
@@ -41,10 +48,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -81,6 +90,7 @@ import ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.selectCharacterMap.s
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.SilverA
 import ar.edu.unlam.mobile.scaffolding.evolution.ui.theme.VioletSky
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -253,7 +263,56 @@ fun ContentView(
     val playerList by selectCharacterViewModel.superHeroList.collectAsState()
     var searchHeroPlayer by remember { mutableStateOf("") }
     val comPlayer by selectCharacterViewModel.comSelected.collectAsState()
+    val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
+    // SensorManager for motion detection
+    val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    val threshold = 5.0f // Adjust this value for sensitivity
+
+    DisposableEffect(Unit) {
+        val sensorListener =
+            object : SensorEventListener {
+                override fun onSensorChanged(event: SensorEvent?) {
+                    event?.let {
+                        val x = event.values[0] // Lateral movement
+                        if (x > threshold) {
+                            // Move right
+                            coroutineScope.launch {
+                                val targetIndex =
+                                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0)
+                                lazyListState.animateScrollToItem(targetIndex)
+                            }
+                        } else if (x < -threshold) {
+                            // Move left
+                            coroutineScope.launch {
+                                val targetIndex =
+                                    (lazyListState.firstVisibleItemIndex + 1).coerceAtMost(
+                                        playerList.size - 1,
+                                    )
+                                lazyListState.animateScrollToItem(targetIndex)
+                            }
+                        } else {
+                        }
+                    }
+                }
+
+                override fun onAccuracyChanged(
+                    sensor: Sensor?,
+                    accuracy: Int,
+                ) {
+                }
+            }
+
+        // Register sensor listener
+        sensorManager.registerListener(sensorListener, accelerometer, SensorManager.SENSOR_DELAY_UI)
+
+        onDispose {
+            // Unregister sensor listener
+            sensorManager.unregisterListener(sensorListener)
+        }
+    }
     if (playerList.isNotEmpty()) {
         Box(
             modifier =
@@ -285,9 +344,51 @@ fun ContentView(
                         comPlayer,
                         navController,
                         audio,
+                        lazyListState,
                     )
                 }
 
+                Row(
+                    modifier = Modifier.fillMaxWidth().height(48.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                val targetIndex =
+                                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0)
+                                lazyListState.animateScrollToItem(targetIndex)
+                            }
+                        },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Scroll Left",
+                            tint = Color.White,
+                        )
+                    }
+
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                val targetIndex =
+                                    (lazyListState.firstVisibleItemIndex + 1).coerceAtMost(
+                                        playerList.size - 1,
+                                    )
+                                lazyListState.animateScrollToItem(targetIndex)
+                            }
+                        },
+                        modifier = Modifier.size(48.dp),
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                            contentDescription = "Scroll Right",
+                            tint = Color.White,
+                        )
+                    }
+                }
                 ButtonWithBackgroundImage(
                     imageResId = R.drawable.iv_attack,
                     onClick = {
@@ -335,10 +436,10 @@ fun LazyRowWithImagesHeroPlayer(
     comPlayer: SuperHeroItem?,
     navController: NavHostController,
     audio: MediaPlayer,
+    lazyListState: LazyListState,
 ) {
     val selectAudio = MediaPlayer.create(LocalContext.current, R.raw.raw_select)
     val cancelSelect = MediaPlayer.create(LocalContext.current, R.raw.raw_cancelselect)
-    val lazyListState = rememberLazyListState()
     val flingBehavior = rememberSnapFlingBehavior(lazyListState)
 
     LazyRow(

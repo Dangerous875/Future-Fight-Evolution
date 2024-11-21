@@ -184,9 +184,9 @@ class CombatViewModel
             _playerAttackActivated.value = true
             viewModelScope.launch {
                 val attackAttribute = superHero1.attack
-                val attackEnhanced = attackAttribute.times(2.5)
+                val attackEnhanced = attackAttribute.times(2.6)
                 _superHeroPlayer.value!!.attack = attackEnhanced.roundToInt()
-                delay(12000)
+                delay(13000)
                 superHero1.attack = attackAttribute
                 _superHeroPlayer.value = superHero1
                 _playerAttackActivated.value = false
@@ -201,7 +201,7 @@ class CombatViewModel
                 val damageAbsAttribute = superHero1.damageAbs
                 _superHeroPlayer.value!!.damageAbs = attackComAttribute
                 _superHeroPlayer.value!!.defense += 100
-                delay(12000)
+                delay(13000)
                 _superHeroPlayer.value!!.defense -= 100
                 _superHeroPlayer.value!!.damageAbs = damageAbsAttribute
                 _playerDefenseActivated.value = false
@@ -230,9 +230,9 @@ class CombatViewModel
                     _vibratorActivated.value = true
                     _comAttackActivated.value = true
                     val attackAttribute = superHero2.attack
-                    val attackEnhanced = attackAttribute.times(2.5)
+                    val attackEnhanced = attackAttribute.times(2.75)
                     _superHeroCom.value!!.attack = attackEnhanced.roundToInt()
-                    delay(12000)
+                    delay(11000)
                     _vibratorActivated.value = false
                     superHero2.attack = attackAttribute
                     _superHeroCom.value = superHero2
@@ -250,7 +250,7 @@ class CombatViewModel
                     val damageAbsAttribute = superHero2.damageAbs
                     _superHeroCom.value!!.damageAbs = attackPlayerAttribute
                     _superHeroCom.value!!.defense += 100
-                    delay(12000)
+                    delay(14000)
                     _superHeroCom.value!!.defense -= 100
                     _superHeroCom.value!!.damageAbs = damageAbsAttribute
                 }

@@ -41,7 +41,7 @@ fun QRGenerateScreen(auth: FirebaseAuth) {
         ) {
             // Fondo de la imagen
             Image(
-                painter = painterResource(id = R.drawable.im_ironman),
+                painter = painterResource(id = R.drawable.im_ironman_qr),
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,

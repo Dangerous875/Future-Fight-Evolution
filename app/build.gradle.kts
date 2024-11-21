@@ -143,6 +143,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.database)
     implementation(libs.firebase.config)
+    // Google Sign-In
+    implementation(libs.play.services.auth)
 
     implementation(libs.zxing.android.embedded.v430)
 }

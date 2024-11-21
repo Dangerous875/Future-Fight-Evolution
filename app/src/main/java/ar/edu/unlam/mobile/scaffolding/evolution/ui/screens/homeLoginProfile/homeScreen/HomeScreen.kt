@@ -20,13 +20,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.SystemUpdate
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,6 +37,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -199,6 +203,7 @@ fun ContentViewHome(
                 ButtonWithBackgroundImage(
                     imageResId = R.drawable.iv_button,
                     onClick = {
+                        homeScreenViewModel.testAnalitic()
                         if (auth.currentUser != null) {
                             navController.navigate(SelectPlayerRoute)
                         } else {
@@ -230,42 +235,79 @@ fun ContentViewHome(
 fun ShowUpdateDialog(viewModel: HomeScreenViewModel) {
     val context = LocalContext.current
     val activity = context as Activity
+
     Dialog(
         onDismissRequest = { },
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
     ) {
-        Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+        Card(
+            shape = RoundedCornerShape(16.dp),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
+            modifier =
+                Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
+        ) {
             Column(
                 modifier =
                     Modifier
                         .padding(24.dp)
-                        .fillMaxWidth()
-                        .height(300.dp),
+                        .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    text = "ACTUALIZA",
-                    fontSize = 22.sp,
-                    color = Black,
-                    fontWeight = FontWeight.Bold,
+                Icon(
+                    imageVector = Icons.Default.SystemUpdate,
+                    contentDescription = "Update Icon",
+                    tint = Color(0xFF3F51B5),
+                    modifier = Modifier.size(48.dp),
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
-                    text = "Para poder disfrutar de todo nuestro contenido actualice la app",
+                    text = "Actualización Disponible",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF3F51B5),
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Para disfrutar de todas las nuevas funciones, actualiza la aplicación a la última versión.",
                     fontSize = 16.sp,
                     color = Color.Gray,
                     textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
-                Spacer(modifier = Modifier.weight(1f))
+
+                Spacer(modifier = Modifier.height(24.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                 ) {
-                    Button(onClick = { activity.finishAffinity() }) {
-                        Text(text = "Exit")
+                    OutlinedButton(
+                        onClick = { activity.finishAffinity() },
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                contentColor = Color.Red,
+                                containerColor = Color.Black,
+                            ),
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(text = "Salir :(", fontSize = 10.sp)
                     }
-                    Button(onClick = { viewModel.navigateToPlayStore(context) }) {
-                        Text(text = "¡Update!")
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Button(
+                        onClick = { viewModel.navigateToPlayStore(context) },
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                containerColor = Color.Green,
+                                contentColor = Color.Black,
+                            ),
+                        modifier = Modifier.weight(1.5f),
+                    ) {
+                        Text(text = "Actualizar :)", fontSize = 14.sp)
                     }
                 }
             }

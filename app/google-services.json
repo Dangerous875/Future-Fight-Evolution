@@ -12,7 +12,20 @@
           "package_name": "ar.edu.unlam.mobile.scaffolding.evolution"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "429792897358-ul2re54qlb1kg9chap244ae4m1pg4uaq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unlam.mobile.scaffolding.evolution",
+            "certificate_hash": "ec63564cbd729d4f3d116d39d5f589b7a54a8c5c"
+          }
+        },
+        {
+          "client_id": "429792897358-fbemn6bhbumd1sua4rh6fdf6q04fjf2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtT9ibCrBvRLKMHi2K6kxfFdswu3wpBek"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429792897358-fbemn6bhbumd1sua4rh6fdf6q04fjf2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     },
@@ -31,7 +49,20 @@
           "package_name": "ar.edu.unlam.mobile.scaffolding.evolution.debug"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "429792897358-8kmbaqe61dgtjjdp9img0arlgptie0gv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.edu.unlam.mobile.scaffolding.evolution.debug",
+            "certificate_hash": "64cd84630e63204e1d1494f3bdd0f07cbb7fe427"
+          }
+        },
+        {
+          "client_id": "429792897358-fbemn6bhbumd1sua4rh6fdf6q04fjf2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDtT9ibCrBvRLKMHi2K6kxfFdswu3wpBek"
@@ -39,7 +70,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429792897358-fbemn6bhbumd1sua4rh6fdf6q04fjf2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

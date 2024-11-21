@@ -3,12 +3,14 @@ package ar.edu.unlam.mobile.scaffolding.evolution.ui.screens.homeLoginProfile.ho
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.CanAccessToAppUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetUserDataFromFireStoreUseCase
 import ar.edu.unlam.mobile.scaffolding.evolution.domain.usecases.GetWallpaperLogosUseCase
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +30,7 @@ class HomeScreenViewModel
         firebaseAuth: FirebaseAuth,
         private val getUserDataFromFireStoreUseCase: GetUserDataFromFireStoreUseCase,
         private val canAccessToAppUseCase: CanAccessToAppUseCase,
+        private val firebaseAnalytics: FirebaseAnalytics,
     ) : ViewModel() {
         private val _blockVersion = MutableStateFlow(false)
         val blockVersion = _blockVersion.asStateFlow()
@@ -99,5 +102,17 @@ class HomeScreenViewModel
                     }
                 }
             context.startActivity(intent)
+        }
+
+        fun testAnalitic() {
+            // Crear un Bundle con los datos de tu evento
+            val bundle =
+                Bundle().apply {
+                    putString("button_name", "custom_button")
+                    putString("action", "click")
+                }
+            // Registra el evento en Firebase Analytics
+            firebaseAnalytics.logEvent("custom_button_click", bundle)
+            Log.e("FirebaseAnalitic", "${firebaseAnalytics.logEvent("custom_button_click", bundle)}")
         }
     }

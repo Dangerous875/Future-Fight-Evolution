@@ -81,11 +81,9 @@ fun CameraScreenBeta(navController: NavController) {
             permissions =
                 listOf(
                     Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 ),
         )
-    LaunchedEffect(Unit) {
+    LaunchedEffect(permissionState) {
         permissionState.launchMultiplePermissionRequest()
     }
 
@@ -142,11 +140,12 @@ fun CameraScreenBeta(navController: NavController) {
                 },
             )
         },
-    ) {
+    ) { paddingValues ->
+
         if (permissionState.allPermissionsGranted) {
-            CamaraComposable(cameraController, lifecycle, modifier = Modifier.padding(it))
+            CamaraComposable(cameraController, lifecycle, modifier = Modifier.padding(paddingValues))
         } else {
-            PermissionDeniedScreen(context)
+            PermissionDeniedScreen(context = context)
         }
     }
 
@@ -165,7 +164,10 @@ fun CameraScreenBeta(navController: NavController) {
 @Composable
 fun PermissionDeniedScreen(context: Context) {
     Box(
-        modifier = Modifier.fillMaxSize().background(BlackCustom),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(BlackCustom),
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
