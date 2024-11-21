@@ -341,6 +341,7 @@ fun TopBarHome(
         }
     }
 
+    // top bar
     TopAppBar(
         modifier = Modifier.height(48.dp),
         title = {
